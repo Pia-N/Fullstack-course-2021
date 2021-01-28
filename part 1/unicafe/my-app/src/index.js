@@ -52,28 +52,26 @@ const Statistics = ({good, neutral, bad,})=> {
     </>
   )
 }
-  return (
-    <div>
-          <Statistic name = "Good " value = {good} />
+return (
+      <table>
+        <tbody>
+          <Statistic name = "Good " value = {good} />    
           <Statistic name = "Neutral " value = {neutral} />
           <Statistic name = "Bad " value = {bad} />
-          <Statistic name = "Total " value = {total} />
           <Statistic name = "Average " value = {average} />
-          <Statistic name = "Positive " value = {positive} />
-      
-    </div>
+          <Statistic name = "Positive " value = {positive} />     
+        </tbody>
+      </table>
   )
 }
 const Statistic = ({name, value}) => {
-  return(
-    <div>
-    <p>{name}{value}</p> 
-    </div>
-
+return(
+  <tr>
+    <td>{name}</td> 
+    <td>{value}</td>
+  </tr>     
   )
 }
-
-
-ReactDOM.render(<App />, 
+  ReactDOM.render(<App />, 
   document.getElementById('root')
 )
