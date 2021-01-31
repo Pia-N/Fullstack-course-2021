@@ -4,22 +4,37 @@ import ReactDOM from 'react-dom'
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const chooseRandom = () => Math.floor(Math.random()*anecdotes.length)
-  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  
   const vote = () => {
-    const copy = [...votes]
-    copy[selected] += 1
-    setVotes(copy)
+    let votesCopy = [...votes]
+    votesCopy[selected] += 1
+    setVotes(votesCopy)
   }
-  return (
+  const mostVotes = votes.indexOf(Math.max(...votes));
+  
+ return (
     <>
+      <Header title = "Anecdote of the day" />
       <p>{props.anecdotes[selected]}</p>
+      <VoteLog logged = {votes[selected]} />
       <Button handleClick = {() => setSelected(chooseRandom)} text = "Next anecdote"/>
       <Button handleClick = {vote} text = "Vote for me" />
-      <VoteLog logged = {votes[selected]} />
-     </>
+      <Header title = "Anecdotes with most votes" />
+      <Header title = "Most voted so far is" />
+      <p> {props.anecdotes[mostVotes]} with {votes[mostVotes]} points </p> 
+      <p> Votes log {votes.join(',')} </p>
+    </>
   )
 }
 
+const Header = ({title}) =>{ 
+return(
+  <>
+  <h2>{title}</h2>
+  </>
+ )
+}
 const anecdotes = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -35,13 +50,14 @@ const Button = ({handleClick, text})=> {
     </button>
   )
 }
-const VoteLog = ({logged}) => {
+const VoteLog = (props) => {
   return(
     <>
-    <p> This anecdote has {logged} votes </p>
+    <p> This anecdote has {props.logged} votes </p>
     </>
   )
 }
+
 ReactDOM.render(
   <App anecdotes={anecdotes} />,document.getElementById('root')
 )
