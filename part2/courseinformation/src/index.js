@@ -42,12 +42,12 @@ const Content = ({course}) => {
   return (
    <div>
     {osat}
-    </div>
+  </div>
   )
 }
 
 const App = () => {
-  const course = {
+  const course = [{
     name: 'Half Stack application development',
     id: 1,
     parts: [
@@ -73,11 +73,30 @@ const App = () => {
         id: 4
       }
     ]
-  }
+  },
+      {
+        name: 'Node.js',
+        id: 2,
+        parts: [
+          {
+            name: 'Routing',
+            exercises: 3,
+            id: 1
+          },
+          {
+            name: 'Middlewares',
+            exercises: 7,
+            id: 2
+          }
+        ]
+      }
+    ]
+    
+let courses = course.map(course => <Course course = {course} />)
 console.log(course, "this is App");
   return (
     <div>
-      <Course course={course} />
+      {courses}
     </div>
   )
 }
