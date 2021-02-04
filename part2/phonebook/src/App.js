@@ -11,13 +11,22 @@ const App = () => {
   // sekä luo uuden henkilöolion joka tallennetaan staten kautta lomakkeeseen.
   const addName = (event) => {
     event.preventDefault()
+  
+  if(persons.find(person => person.name === newName))
+  {
+    window.alert(`${newName} is already added to phonebook`)
+    setNewName("")
+  }
+  else {
     const personObject = {
       name: newName,
       id: newName
     }
     setPersons(persons.concat(personObject))
-    setNewName('')
+    setNewName("")
   }
+    
+}
  // tämä funktio tarkkailee input-kenttien tilaa ja asettaa uuden arvon muuttujalle
   // console.log(event.target.value), tämä tulostaa konsoliin mitä syöttökentässä lukee
   const handleNameChange = (event) => {
