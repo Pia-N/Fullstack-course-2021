@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-
+import Persons from './components/Persons'
+import Form from './components/Form'
 
 const App = () => {
   const [ persons, setPersons] = useState([
@@ -19,7 +20,7 @@ const App = () => {
 
   //tapahtumakäsittelijä estää sivun uudelleenlataamisen 
   // sekä luo uuden henkilöolion joka tallennetaan staten kautta lomakkeeseen.
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault()
   
   if(persons.find(person => person.name === newName))
@@ -55,34 +56,31 @@ const App = () => {
     console.log(event.target.value)
     setNewFilter(event.target.value)
   }
+  const Filter = (props) => {
+    return (
+       
+      <div>filter: <input value = {props.value}
+        onChange = {props.onChange} /> 
+      </div>  
+    )
+  }
+  
   console.log(persons.map, "this is persons map");
   return (
-  
     <div>
       <h2>Phonebook</h2>
-      <div>
-      <div>filter: <input value = {newFilter}
-        onChange = {handleFilterChange} /> 
-      </div>  
-      </div> 
-      <form onSubmit = {addName}>
-        <div>name: <input value = {newName}
-        onChange = {handleNameChange} /> 
-       <div>number: <input value = {newNumber} 
-        onChange ={handleNumberChange} />
-        </div>
-        <button type="submit">add</button>
-        </div>
-      </form >
+
+      <Filter value = {newFilter} onChange = {handleFilterChange} />
+      <Form addPerson = {addPerson} newName ={newName} 
+      handleNameChange = {handleNameChange} newNumber = {newNumber} 
+      handleNumberChange ={handleNumberChange} />
   
       <h2>Numbers</h2>
-      <ul>
-      {showPersons.map (person => 
-      <li key = {person.name}>{person.name} {person.number}</li>
-      )}
-      </ul>
+
+      <Persons showPersons = {showPersons}/>
+
     </div>
-    )
+  )
 }
 
 export default App
