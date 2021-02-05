@@ -1,15 +1,10 @@
 import React, { useState } from 'react'
 import Persons from './components/Persons'
 import Form from './components/Form'
+import Filter from './components/Filter'
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '0500 0800' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-    
-  ]) 
+  const [ persons, setPersons] = useState([]) 
   const [newNumber, setNewNumber] = useState('')
   const [newName, setNewName ] = useState('')
   const [newFilter, setNewFilter] = useState('')
@@ -56,16 +51,7 @@ const App = () => {
     console.log(event.target.value)
     setNewFilter(event.target.value)
   }
-  const Filter = (props) => {
-    return (
-       
-      <div>filter: <input value = {props.value}
-        onChange = {props.onChange} /> 
-      </div>  
-    )
-  }
-  
-  console.log(persons.map, "this is persons map");
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -76,9 +62,7 @@ const App = () => {
       handleNumberChange ={handleNumberChange} />
   
       <h2>Numbers</h2>
-
       <Persons showPersons = {showPersons}/>
-
     </div>
   )
 }
