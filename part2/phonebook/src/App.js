@@ -1,13 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Form from './components/Form'
 import Filter from './components/Filter'
+import axios from 'axios'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [newNumber, setNewNumber] = useState('')
   const [newName, setNewName ] = useState('')
   const [newFilter, setNewFilter] = useState('')
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons')
+
+
   const showPersons = newFilter.length === 0
   ? persons 
   : persons.filter(person => person.name.toUpperCase().includes(newFilter.toUpperCase()))
