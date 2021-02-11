@@ -1,11 +1,12 @@
 import React from 'react'
-
-
+import Country from './Country'
 
 
 const Countries  = (props) => {
 const {countries, filter} = props
-    console.log(countries.length, "maat lista");
+    console.log(countries, "maat lista");
+    console.log(filter, "tämä on filter");
+   
     if(filter === '' || countries.length === 0){
         return (
           <div></div>
@@ -19,14 +20,21 @@ const {countries, filter} = props
     </div>
     )
     }
-    else if (countries.length >= 2)
+    else if (countries.length === 1)
     {
     return (
       <div>
-      {countries.map ((country) => 
-      <p key = {country.numericCode}>{country.name}  </p>)}
+      <Country country = {countries[0]} />
       </div>
       )
+    }
+    else {
+     return (
+         <div>
+        {countries.map ((country) => 
+            <p key = {country.numericCode}>{country.name} </p>)}
+        </div>
+     )
     }
 
 }
