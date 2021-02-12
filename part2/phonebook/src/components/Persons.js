@@ -1,11 +1,13 @@
-import React from 'react';
+import React from 'react'
+import Person from './Person.js'
 
-const Persons = ({showPersons}) => {
+const Persons = (props) => {
+    const {showPersons,persons,setPersons} = props
     return (
-    <div>
-    {showPersons.map (person => 
-    <p key = {person.name}>{person.name} {person.number}</p>)}
-    </div>
-    )
+    showPersons.map ((person) => 
+    <div key = {person.name}>
+        <Person person ={person} persons={persons} setPersons ={setPersons}/>
+   </div>
+    ))
 }
 export default Persons

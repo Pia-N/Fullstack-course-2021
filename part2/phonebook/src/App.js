@@ -3,9 +3,10 @@ import Persons from './components/Persons'
 import Form from './components/Form'
 import Filter from './components/Filter'
 import axios from 'axios'
+//import personService from './services/personsdata'
 
 const App = () => {
-  const [ persons, setPersons] = useState([]) 
+  const [persons, setPersons] = useState([]) 
   const [newNumber, setNewNumber] = useState('')
   const [newName, setNewName ] = useState('')
   const [newFilter, setNewFilter] = useState('')
@@ -34,18 +35,24 @@ const App = () => {
   
   if(persons.find(person => person.name === newName))
   {
+    // if here for the updating (call the person service or use the axios versin to update)
+    // change window alert to window confirm same as 2.18
     window.alert(`${newName} is already added to phonebook`)
     setNewName('')
   }
   else {
     const personObject = {
       name: newName,
-      id: newName,
+      id: Math.floor(Math.random() * 1000000)+1,
       number: newNumber
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+    axios
+    .post('http://localhost:3001/persons', personObject)
+    .then(response => {
+      setPersons(persons.concat(response.data))
+      setNewName('')
+      setNewNumber('')
+    })
     }
   }
   
@@ -76,7 +83,7 @@ const App = () => {
       handleNumberChange ={handleNumberChange} />
   
       <h2>Numbers</h2>
-      <Persons showPersons = {showPersons}/>
+      <Persons showPersons = {showPersons} persons ={persons} setPersons ={setPersons}/>
     </div>
   )
 }
