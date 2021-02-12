@@ -1,15 +1,16 @@
 import React from 'react'
+import Button from './Button'
 import Country from './Country'
 
 
 const Countries  = (props) => {
-const {countries, filter} = props
+const {countries, filter, setFilter} = props
     console.log(countries, "maat lista");
     console.log(filter, "tämä on filter");
-   
+
     if(filter === '' || countries.length === 0){
         return (
-          <div></div>
+          <div>No search item given</div>
         )
      }
     else if(countries.length >= 10)
@@ -20,6 +21,15 @@ const {countries, filter} = props
     </div>
     )
     }
+    else if (countries.length > 1){
+    return(
+      countries.map((country) =>
+      <div key={country.numericCode}>
+        {country.name}
+        <Button country = {country} setFilter={setFilter} />
+        </div>)
+    )
+    }
     else if (countries.length === 1)
     {
     return (
@@ -28,15 +38,17 @@ const {countries, filter} = props
       </div>
       )
     }
-    else {
+    else 
+    {
      return (
-         <div>
+        <div>
         {countries.map ((country) => 
-            <p key = {country.numericCode}>{country.name} </p>)}
+        <p key = {country.numericCode}>{country.name} </p>)}
         </div>
      )
     }
-
+    
+        
 }
   
   export default Countries

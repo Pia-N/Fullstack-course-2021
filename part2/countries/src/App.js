@@ -33,7 +33,7 @@ const App = () => {
     <div>
       <h1> Countries </h1>
       <Filter value ={newFilter} onChange = {handleFilterChange} /> 
-      <Countries filter ={newFilter} countries = {showCountries} />
+      <Countries filter ={newFilter} countries = {showCountries} setFilter= {setFilter} />
     
      </div>
     
