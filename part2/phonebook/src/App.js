@@ -65,7 +65,7 @@ const App = () => {
      personService
     .update(existingPerson.id,updatePerson)
     .then(response => {
-      setPersons(persons.map(person => person.id !== existingPerson ? person: response.data))
+      setPersons(persons.map(person => person.id !== existingPerson.id ? person: response.data))
       setNewName('')
       setNewNumber('')
     })
