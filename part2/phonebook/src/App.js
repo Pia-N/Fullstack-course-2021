@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Form from './components/Form'
 import Filter from './components/Filter'
-import axios from 'axios'
-//import personService from './services/personsdata'
+import personService from './services/personsdata'
 
 const App = () => {
+//  state hookit, jotka säilyttävät muuttujan tilan ja mahdollistavat sen asettamisen
   const [persons, setPersons] = useState([]) 
   const [newNumber, setNewNumber] = useState('')
   const [newName, setNewName ] = useState('')
   const [newFilter, setNewFilter] = useState('')
 
+// useEffect-hook, joka hakee datan "palvelimelta"
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
@@ -25,39 +26,56 @@ const App = () => {
 
   const showPersons = newFilter.length === 0
   ? persons 
-  : persons.filter(person => person.name.toUpperCase().includes(newFilter.toUpperCase()))
+  : persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
     
-
   //tapahtumakäsittelijä estää sivun uudelleenlataamisen 
   // sekä luo uuden henkilöolion joka tallennetaan staten kautta lomakkeeseen.
+
   const addPerson = (event) => {
     event.preventDefault()
-  
-  if(persons.find(person => person.name === newName))
-  {
-    // if here for the updating (call the person service or use the axios versin to update)
-    // change window alert to window confirm same as 2.18
-    window.alert(`${newName} is already added to phonebook`)
-    setNewName('')
-  }
-  else {
+    console.log("nappia painettu",event.target);
     const personObject = {
       name: newName,
-      id: Math.floor(Math.random() * 1000000)+1,
       number: newNumber
+      //id: Math.floor(Math.random() * 1000000)+1
+     }
+     const existingPerson = (persons.find(person => person.name.toLowerCase() === newName.toLowerCase()))
+
+     if (persons.every((person) => person.name.toLowerCase() !== newName.toLowerCase()))
+     //creating a new person
+    {
+      personService
+      .create(personObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch(error => {
+        console.log('fail')
+      })
     }
-    axios
-    .post('http://localhost:3001/persons', personObject)
+  
+   // a number update
+   if(existingPerson) {
+     
+    if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one? `)) {
+    console.log(personObject,  "uudet tiedot");
+    const updatePerson = {...existingPerson, number: newNumber}
+     personService
+    .update(existingPerson.id,updatePerson)
     .then(response => {
-      setPersons(persons.concat(response.data))
+      setPersons(persons.map(person => person.id !== existingPerson ? person: response.data))
       setNewName('')
       setNewNumber('')
     })
+    .catch(error => {
+      console.log('fail')
+    })
     }
   }
-  
- 
-  
+}
+    
  // tämä funktio tarkkailee input-kenttien tilaa ja asettaa uuden arvon muuttujalle
   // console.log(event.target.value), tämä tulostaa konsoliin mitä syöttökentässä lukee
   const handleNameChange = (event) => {
@@ -85,7 +103,10 @@ const App = () => {
       <h2>Numbers</h2>
       <Persons showPersons = {showPersons} persons ={persons} setPersons ={setPersons}/>
     </div>
-  )
+      )
 }
 
-export default App
+
+  export default App
+
+  
