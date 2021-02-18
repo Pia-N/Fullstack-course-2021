@@ -8,16 +8,16 @@ const handleClick = (props) => {
   console.log(setPersons, "uusi tila");
   console.log(persons, "tyypit");
 
- if (window.confirm("Do you really want to delete your information?"))
+  if (window.confirm("Do you really want to delete your information?"))
  {
     setPersons(persons.filter(person => person.id !== id))
   return(
         personService.remove(id)
     )
  }
- 
   
-  }
+}
+  
 
 const Button = (props) => {
     

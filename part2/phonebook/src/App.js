@@ -3,6 +3,7 @@ import Persons from './components/Persons'
 import Form from './components/Form'
 import Filter from './components/Filter'
 import personService from './services/personsdata'
+import Notification from './components/Notification'
 
 const App = () => {
 //  state hookit, jotka säilyttävät muuttujan tilan ja mahdollistavat sen asettamisen
@@ -10,6 +11,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newName, setNewName ] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [errorMsg, setErrorMsg] = useState(null)
+  const [notificationType, setNotificationType] = useState('error')
 
 // useEffect-hook, joka hakee datan "palvelimelta"
   useEffect(() => {
@@ -50,6 +53,11 @@ const App = () => {
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewNumber('')
+        setErrorMsg (`Person '${newName}' has been added `)
+        setNotificationType('notification')
+        setTimeout(() => {
+        setErrorMsg(null)
+      }, 5000)
       })
       .catch(error => {
         console.log('fail')
@@ -66,14 +74,25 @@ const App = () => {
     .update(existingPerson.id,updatePerson)
     .then(response => {
       setPersons(persons.map(person => person.id !== existingPerson.id ? person: response.data))
-      setNewName('')
-      setNewNumber('')
-    })
-    .catch(error => {
-      console.log('fail')
+      setErrorMsg (`'${newName}' has been updated`)
+      setNotificationType('notification')
+      setTimeout(() => {
+      setErrorMsg(null)
+      }, 5000)
+     })
+    .catch(error => { 
+      setErrorMsg (`'${newName}' was already deleted from server`)
+      setNotificationType('error')
+      setPersons(persons.filter(person => person.id !== existingPerson.id)) 
+      setTimeout(() => {
+      setErrorMsg(null)
+      }, 5000)
+      
     })
     }
   }
+  setNewName('')
+  setNewNumber('')
 }
     
  // tämä funktio tarkkailee input-kenttien tilaa ja asettaa uuden arvon muuttujalle
@@ -94,12 +113,16 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <div>
+      < Notification message = {errorMsg} notificationType = {notificationType}/>
+      </div>
       <Filter value = {newFilter} onChange = {handleFilterChange} />
+      <h3>Add a new number</h3>
       <Form addPerson = {addPerson} newName ={newName} 
       handleNameChange = {handleNameChange} newNumber = {newNumber} 
-      handleNumberChange ={handleNumberChange} />
-  
+      handleNumberChange ={handleNumberChange}  setErrorMsg = {setErrorMsg}
+      notificationType = {notificationType} setNotificationType = {setNotificationType} />
+
       <h2>Numbers</h2>
       <Persons showPersons = {showPersons} persons ={persons} setPersons ={setPersons}/>
     </div>
